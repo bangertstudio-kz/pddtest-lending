@@ -1,0 +1,70 @@
+/* Modernist tokens from the design (light page, blue accent). */
+:root {
+  --bg: #f3f2f2;
+  --ink: #201e1d;
+  --mut: #605d5d;
+  --div: rgba(32, 30, 29, 0.4);
+  --acc: #2457d5;
+  --acc-hover: #1a3fa0;
+  --on-acc: #ffffff;
+  --gutter: clamp(20px, 4vw, 56px);
+  --font: 'Archivo', system-ui, sans-serif;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font);
+  font-size: 15px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+}
+
+a {
+  color: var(--acc);
+}
+
+a:hover {
+  color: var(--acc-hover);
+}
+
+h1,
+h2,
+h3 {
+  margin: 0;
+  font-weight: 800;
+}
+
+p {
+  margin: 0;
+}
+
+:focus {
+  outline: none;
+}
+
+:focus-visible {
+  outline: 2px solid var(--acc);
+  outline-offset: 2px;
+}
+
+::selection {
+  background: color-mix(in srgb, var(--acc) 30%, transparent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
