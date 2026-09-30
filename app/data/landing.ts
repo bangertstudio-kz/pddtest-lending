@@ -7,6 +7,9 @@ export const storeLinks = { appStore: '#', googlePlay: '#' }
 
 export const contactEmail = 'hello@pdd.app'
 
+/** Who the offer and the privacy policy are from. A placeholder until the real name and БИН/ИИН are known. */
+export const legalEntity = '[наименование ИП или ТОО, БИН/ИИН, адрес]'
+
 export const nav = [
   { href: '#features', label: 'Возможности' },
   { href: '#countries', label: 'Страны' },
@@ -105,6 +108,6 @@ export const faq = [
   },
   {
     q: 'Как отменить подписку?',
-    a: 'В профиле приложения, в один тап. Если отменить во время пробного периода, списания не будет.',
+    a: 'В настройках подписок App Store или Google Play. Если отменить во время пробного периода, списания не будет.',
   },
 ]

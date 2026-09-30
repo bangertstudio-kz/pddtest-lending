@@ -6,8 +6,8 @@ import { contactEmail } from '~/data/landing'
   <footer class="footer">
     <span>© 2026 ПДД тесты</span>
     <nav class="links" aria-label="Документы">
-      <a href="#">Условия</a>
-      <a href="#">Конфиденциальность</a>
+      <NuxtLink to="/offer">Договор оферты</NuxtLink>
+      <NuxtLink to="/privacy">Политика конфиденциальности</NuxtLink>
       <a :href="`mailto:${contactEmail}`">{{ contactEmail }}</a>
     </nav>
   </footer>
