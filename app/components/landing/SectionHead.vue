@@ -1,31 +1,33 @@
 <script setup lang="ts">
-defineProps<{ title: string; note?: string }>()
+defineProps<{ title: string; lead?: string }>()
 </script>
 
 <template>
   <div class="head">
+    <span class="line" />
     <h2>{{ title }}</h2>
-    <span v-if="note" class="note">{{ note }}</span>
+    <p v-if="lead" class="lead">{{ lead }}</p>
   </div>
 </template>
 
 <style scoped>
 .head {
   display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  align-items: baseline;
-  gap: 16px;
-  padding-bottom: 12px;
-  border-bottom: 2px solid var(--ink);
+  flex-direction: column;
+  gap: 20px;
+  max-width: 760px;
+  margin-bottom: clamp(40px, 5vw, 64px);
+}
+.line {
+  width: 64px;
+  height: 2px;
+  background: var(--acc);
 }
 h2 {
-  font-size: clamp(32px, 4vw, 52px);
-  letter-spacing: -0.025em;
-  line-height: 1.1;
+  font-size: clamp(32px, 4.4vw, 56px);
 }
-.note {
+.lead {
   color: var(--mut);
-  font-size: 14px;
+  font-size: 18px;
 }
 </style>

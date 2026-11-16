@@ -1,9 +1,11 @@
-// Landing copy, as in the design («Лендинг.dc.html»).
+// Landing copy. Facts - countries, rules, topics, questions, prices - are not
+// here: they come from the app's API (`useCatalog`).
 
-import type { Screen } from './demo'
-
-/** Store pages. `#` until the apps are published. */
-export const storeLinks = { appStore: '#', googlePlay: '#' }
+/** Store pages. Google Play's opens once the Android app is published. */
+export const storeLinks = {
+  appStore: 'https://apps.apple.com/app/id6817777413',
+  googlePlay: 'https://play.google.com/store/apps/details?id=com.bangertstudio.pddtest',
+}
 
 export const contactEmail = 'hello@pdd.app'
 
@@ -11,103 +13,21 @@ export const contactEmail = 'hello@pdd.app'
 export const legalEntity = '[наименование ИП или ТОО, БИН/ИИН, адрес]'
 
 export const nav = [
-  { href: '#features', label: 'Возможности' },
   { href: '#countries', label: 'Страны' },
   { href: '#pricing', label: 'Цены' },
   { href: '#faq', label: 'Вопросы' },
 ]
 
-export const numbers = [
-  { value: '1 200+', label: 'вопросов из официальных билетов' },
-  { value: '14', label: 'тем — от знаков до первой помощи' },
-  { value: '4', label: 'страны и категории A, B, C, D' },
-  { value: 'RU · KZ', label: 'вопросы на русском и казахском' },
-]
+/** The app's screens the phones show: the store screenshots' raw frames. */
+export type Screen = 'home' | 'exam' | 'explain' | 'mistakes' | 'topics' | 'stats'
 
-export interface Feature {
-  n: string
-  screen: Screen
-  title: string
-  text: string
-  points: string[]
+/** Countries on their way: shown as «скоро» next to the ones the API has. */
+export const soonCountries = ['KZ', 'UZ', 'BY']
+
+/** The plan the pricing marks, and a line under each plan, by plan code. */
+export const popularPlan = 'quarter'
+export const planNotes: Record<string, string> = {
+  month: 'Если экзамен совсем скоро',
+  quarter: 'Столько обычно длится подготовка',
+  year: 'Для нескольких категорий',
 }
-
-export const features: Feature[] = [
-  {
-    n: '01',
-    screen: 'topics',
-    title: 'Тренировка по темам',
-    text: 'Решай по одной теме, пока не станет стабильно зелёной. Объяснение после каждого ответа.',
-    points: ['14 тем по разделам ПДД', 'Слабые темы — всегда наверху', 'Картинки и схемы как в билетах'],
-  },
-  {
-    n: '02',
-    screen: 'exam',
-    title: 'Экзамен как настоящий',
-    text: '40 вопросов, 40 минут, не больше 4 ошибок. Подсказок нет — только таймер и ты.',
-    points: ['Правила твоей страны', 'Результат сразу после сдачи', 'Неограниченные попытки'],
-  },
-  {
-    n: '03',
-    screen: 'mistakes',
-    title: 'Разбор ошибок',
-    text: 'Каждая ошибка попадает в отдельный список и уходит из него, только когда ответишь верно.',
-    points: ['Правильный ответ и объяснение', 'Сколько раз ошибся', 'Повтор всех ошибок одним нажатием'],
-  },
-  {
-    n: '04',
-    screen: 'stats',
-    title: 'Готовность в процентах',
-    text: 'Одна цифра показывает, можно ли идти на экзамен. Детали — по темам, неделе и категориям.',
-    points: ['Прогресс по категориям A–D', 'Активность за неделю', 'Что подтянуть в первую очередь'],
-  },
-]
-
-export const countries = [
-  { code: 'KZ', name: 'Казахстан', rule: '40 вопросов · 40 минут · 4 ошибки' },
-  { code: 'RU', name: 'Россия', rule: '20 вопросов · 20 минут · 2 ошибки' },
-  { code: 'BY', name: 'Беларусь', rule: '10 вопросов · 15 минут · 1 ошибка' },
-  { code: 'UZ', name: 'Узбекистан', rule: '20 вопросов · 25 минут · 2 ошибки' },
-]
-
-export interface Plan {
-  name: string
-  price: string
-  per: string
-  tag: string
-  note: string
-  highlight?: boolean
-}
-
-export const plans: Plan[] = [
-  { name: 'Бесплатно', price: '0 ₸', per: 'навсегда', tag: '', note: '5 тем, случайные билеты и режим экзамена' },
-  { name: '1 месяц', price: '2 490 ₸', per: '2 490 ₸ / мес', tag: '', note: 'Если экзамен совсем скоро' },
-  {
-    name: '3 месяца',
-    price: '5 990 ₸',
-    per: '1 997 ₸ / мес',
-    tag: 'Популярный',
-    note: 'Столько обычно длится подготовка',
-    highlight: true,
-  },
-  { name: '12 месяцев', price: '14 990 ₸', per: '1 249 ₸ / мес', tag: '−50%', note: 'Для нескольких категорий' },
-]
-
-export const faq = [
-  {
-    q: 'Вопросы совпадают с настоящим экзаменом?',
-    a: 'Да, база собрана из официальных экзаменационных билетов каждой страны и обновляется вместе с изменениями ПДД.',
-  },
-  {
-    q: 'Что входит в бесплатную версию?',
-    a: '5 тем, случайные билеты и режим экзамена. Разбор ошибок, все 14 тем и статистика — в Премиум.',
-  },
-  {
-    q: 'Если я сменю категорию, прогресс пропадёт?',
-    a: 'Нет. Общие вопросы — знаки, разметка, первая помощь — засчитываются во все категории. С нуля придётся решать только вопросы новой категории.',
-  },
-  {
-    q: 'Как отменить подписку?',
-    a: 'В настройках подписок App Store или Google Play. Если отменить во время пробного периода, списания не будет.',
-  },
-]

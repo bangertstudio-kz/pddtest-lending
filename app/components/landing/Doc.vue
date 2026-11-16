@@ -1,7 +1,7 @@
 <script setup lang="ts">
 const props = defineProps<{ title: string; updated: string }>()
 
-useHead({ title: `${props.title} — ПДД тесты` })
+useHead({ title: `${props.title} - ПДД тесты` })
 </script>
 
 <template>
