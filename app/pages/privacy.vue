@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import { contactEmail, legalEntity } from '~/data/landing'
+import { contactEmail } from '~/data/landing'
 </script>
 
 <template>
   <LandingDoc title="Политика конфиденциальности" updated="30 сентября 2026 года">
     <p>
       Эта политика описывает, какие данные собирает приложение «ПДД тесты» и сайт, зачем и как
-      ими распорядиться. Оператор данных - {{ legalEntity }}.
+      ими распорядиться. Оператор данных - разработчик приложения «ПДД тесты».
     </p>
 
     <h2>1. Какие данные мы собираем</h2>
@@ -55,7 +55,7 @@ import { contactEmail, legalEntity } from '~/data/landing'
 
     <h2>7. Контакты</h2>
     <p>
-      {{ legalEntity }} · <a :href="`mailto:${contactEmail}`">{{ contactEmail }}</a>
+      Разработчик приложения «ПДД тесты» · <a :href="`mailto:${contactEmail}`">{{ contactEmail }}</a>
     </p>
   </LandingDoc>
 </template>

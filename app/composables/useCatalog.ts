@@ -38,6 +38,33 @@ export function plural(n: number, [one, few, many]: [string, string, string]) {
 const number = new Intl.NumberFormat('ru-RU')
 /** 1394 → «1 394». */
 export const formatNumber = (n: number) => number.format(n)
+/** 2490, 'KZT' → «2 490 ₸»; 3.99, 'USD' → «3,99 $»: kopecks only where the price has them. */
+export const formatMoney = (n: number, currency: string) => {
+  const digits = Number.isInteger(n) ? 0 : 2
+  return new Intl.NumberFormat('ru-RU', {
+    style: 'currency',
+    currency,
+    currencyDisplay: 'narrowSymbol',
+    minimumFractionDigits: digits,
+    maximumFractionDigits: digits,
+  }).format(n)
+}
+
+/** A plan as the pricing shows it. The API's money is hundredths of currency in any currency. */
+const toPlan = (p: ApiPlan) => ({
+  code: p.code,
+  months: p.months,
+  name: `${p.months} ${plural(p.months, ['месяц', 'месяца', 'месяцев'])}`,
+  price: p.price_tiyn / 100,
+  perMonth: p.per_month_tiyn / 100,
+  currency: p.currency,
+  trialDays: p.trial_days,
+})
+export type Plan = ReturnType<typeof toPlan>
+
+/** The plans at the stores' prices in a country (ISO alpha-2). */
+export const fetchPlans = async (api: string, country: string) =>
+  (await $fetch<ApiPlan[]>('/v1/billing/plans', { baseURL: api, query: { country } })).map(toPlan)
 const regions = new Intl.DisplayNames(['ru'], { type: 'region' })
 
 export function useCatalog() {
@@ -58,10 +85,6 @@ export function useCatalog() {
       countries.map((c) => get<ApiTopic[]>(`/v1/content/topics?country_id=${c.id}`, [])),
     )
 
-    const money = (tiyn: number, currency: string) =>
-      new Intl.NumberFormat('ru-RU', { style: 'currency', currency, currencyDisplay: 'narrowSymbol', maximumFractionDigits: 0 }).format(tiyn / 100)
-    const monthly = plans.find((p) => p.months === 1)
-
     const list = countries.map((c, i) => ({
       code: c.code,
       name: regions.of(c.code) ?? c.code,
@@ -81,16 +104,9 @@ export function useCatalog() {
       topics: Math.max(0, ...list.map((c) => c.topics)),
       freeTopics: list.length ? Math.min(...list.map((c) => c.freeTopics)) : 0,
       categories: [...new Set(list.flatMap((c) => c.categories.map((k) => k.code)))],
-      plans: plans.map((p) => ({
-        code: p.code,
-        months: p.months,
-        name: `${p.months} ${plural(p.months, ['месяц', 'месяца', 'месяцев'])}`,
-        price: money(p.price_tiyn, p.currency),
-        perMonth: `${money(p.per_month_tiyn, p.currency)} / мес`,
-        trialDays: p.trial_days,
-        discount: monthly ? Math.round((1 - p.per_month_tiyn / monthly.per_month_tiyn) * 100) : 0,
-      })),
-      free: money(0, plans[0]?.currency ?? 'KZT'),
+      // The App Store's prices in Kazakhstan; the pricing asks for the
+      // visitor's country in the browser.
+      plans: plans.map(toPlan),
       trialDays: Math.max(0, ...plans.map((p) => p.trial_days)),
     }
   })

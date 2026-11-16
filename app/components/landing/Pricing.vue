@@ -1,7 +1,18 @@
 <script setup lang="ts">
-import { planNotes, popularPlan } from '~/data/landing'
+import { planNotes, popularPlan, visitorCountry } from '~/data/landing'
 
 const { data: c } = await useCatalog()
+
+// The generated HTML shows Kazakhstan's prices; the browser asks for the
+// visitor's country after hydration, so server and client markup still match.
+// Unanswered, the tenge stay.
+const api = useRuntimeConfig().public.apiBase
+const local = ref<Plan[] | null>(null)
+onMounted(async () => {
+  const country = visitorCountry()
+  if (country !== 'KZ') local.value = await fetchPlans(api, country).catch(() => null)
+})
+const plans = computed(() => local.value ?? c.value?.plans ?? [])
 
 const topicsWord = (n: number) => plural(n, ['тема', 'темы', 'тем'])
 
@@ -20,13 +31,16 @@ const features = computed(() => {
 })
 
 const cards = computed(() => {
-  if (!c.value) return []
+  if (!plans.value.length) return []
   const days = (n: number) => `${n} ${plural(n, ['день', 'дня', 'дней'])}`
+  const currency = plans.value[0]!.currency
+  const money = (n: number) => formatMoney(n, currency)
+  const monthly = plans.value.find((p) => p.months === 1)?.perMonth ?? 0
   return [
     {
       key: 'free',
       name: 'Бесплатно',
-      price: c.value.free,
+      price: money(0),
       per: 'навсегда',
       badges: [] as { text: string; acc?: boolean }[],
       premium: false,
@@ -34,17 +48,19 @@ const cards = computed(() => {
       note: '',
       cta: 'Скачать',
     },
-    ...c.value.plans.map((p) => {
+    ...plans.value.map((p) => {
+      const perMonth = `${money(p.perMonth)} / мес`
+      const discount = monthly ? Math.round((1 - p.perMonth / monthly) * 100) : 0
       const popular = p.code === popularPlan
       const badges: { text: string; acc?: boolean }[] = []
       if (popular) badges.push({ text: 'Популярный', acc: true })
-      else if (p.discount > 0) badges.push({ text: `−${p.discount}%` })
+      else if (discount > 0) badges.push({ text: `−${discount}%` })
       if (p.trialDays) badges.push({ text: `${days(p.trialDays)} бесплатно` })
       return {
         key: p.code,
         name: p.name,
-        price: p.price,
-        per: popular && p.discount > 0 ? `${p.perMonth} · −${p.discount}%` : p.perMonth,
+        price: money(p.price),
+        per: popular && discount > 0 ? `${perMonth} · −${discount}%` : perMonth,
         badges,
         premium: true,
         popular,

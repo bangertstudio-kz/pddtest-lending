@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { contactEmail, legalEntity } from '~/data/landing'
+import { contactEmail } from '~/data/landing'
 
 const { data: c } = await useCatalog()
 const paid = computed(() => c.value?.plans ?? [])
@@ -8,7 +8,7 @@ const paid = computed(() => c.value?.plans ?? [])
 <template>
   <LandingDoc title="Договор оферты" updated="30 сентября 2026 года">
     <p>
-      Этот документ - публичная оферта {{ legalEntity }} (далее - Исполнитель) любому лицу
+      Этот документ - публичная оферта разработчика приложения «ПДД тесты» (далее - Исполнитель) любому лицу
       (далее - Пользователь) о доступе к приложению «ПДД тесты». Регистрация в приложении или
       оплата подписки означает полное принятие оферты.
     </p>
@@ -21,7 +21,7 @@ const paid = computed(() => c.value?.plans ?? [])
 
     <h2>2. Подписка и цена</h2>
     <ul>
-      <li v-for="plan in paid" :key="plan.name">{{ plan.name }} - {{ plan.price }}</li>
+      <li v-for="plan in paid" :key="plan.name">{{ plan.name }} - {{ formatMoney(plan.price, plan.currency) }}</li>
     </ul>
     <p>
       Подписка оформляется и оплачивается через App Store или Google Play. Цена в магазине для
@@ -71,7 +71,7 @@ const paid = computed(() => c.value?.plans ?? [])
 
     <h2>9. Реквизиты</h2>
     <p>
-      {{ legalEntity }} · <a :href="`mailto:${contactEmail}`">{{ contactEmail }}</a>
+      Разработчик приложения «ПДД тесты» · <a :href="`mailto:${contactEmail}`">{{ contactEmail }}</a>
     </p>
   </LandingDoc>
 </template>
