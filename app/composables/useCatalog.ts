@@ -20,11 +20,12 @@ interface ApiTopic {
   is_free: boolean
   questions: number
 }
+/** Money comes as an integer of the currency's minor unit with its ISO 4217 code, as in Stripe's API: 34900 RUB is 349 ₽. */
 interface ApiPlan {
   code: string
   months: number
-  price_tiyn: number
-  per_month_tiyn: number
+  price: number
+  per_month: number
   trial_days: number
   currency: string
 }
@@ -50,13 +51,17 @@ export const formatMoney = (n: number, currency: string) => {
   }).format(n)
 }
 
-/** A plan as the pricing shows it. The API's money is hundredths of currency in any currency. */
+/** Minor units of currency as a decimal amount: Intl knows the currency's digits - 2 for RUB, 0 for JPY. */
+const fromMinorUnits = (minor: number, currency: string) =>
+  minor / 10 ** new Intl.NumberFormat('en', { style: 'currency', currency }).resolvedOptions().maximumFractionDigits!
+
+/** A plan as the pricing shows it. */
 const toPlan = (p: ApiPlan) => ({
   code: p.code,
   months: p.months,
   name: `${p.months} ${plural(p.months, ['месяц', 'месяца', 'месяцев'])}`,
-  price: p.price_tiyn / 100,
-  perMonth: p.per_month_tiyn / 100,
+  price: fromMinorUnits(p.price, p.currency),
+  perMonth: fromMinorUnits(p.per_month, p.currency),
   currency: p.currency,
   trialDays: p.trial_days,
 })
