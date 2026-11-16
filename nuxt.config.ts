@@ -13,6 +13,7 @@ export default defineNuxtConfig({
       title: 'ПДД Тесты - сдай теорию с первого раза',
       meta: [
         { name: 'theme-color', content: '#0a0c11' },
+        { name: 'yandex-verification', content: '27e6de1adabd13b5' },
         { property: 'og:title', content: 'ПДД тесты - сдай теорию с первого раза' },
         {
           property: 'og:description',
