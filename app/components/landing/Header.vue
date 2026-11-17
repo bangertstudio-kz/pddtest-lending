@@ -13,6 +13,8 @@ import { nav } from '~/data/landing'
       <nav class="nav" aria-label="Разделы">
         <a v-for="n in nav" :key="n.href" :href="n.href">{{ n.label }}</a>
       </nav>
+      <!-- The web app: the same account as on the phone. -->
+      <a href="https://app.pddtest.bangertstudio.kz" class="signin">Войти</a>
       <a href="#download" class="btn small">Скачать</a>
     </div>
   </header>
@@ -60,6 +62,18 @@ import { nav } from '~/data/landing'
 .nav a:hover {
   color: var(--ink);
 }
+.signin {
+  margin-right: -16px;
+  padding: 10px 4px;
+  color: var(--ink);
+  font-size: 15px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.signin:hover {
+  color: var(--acc);
+}
 .small {
   padding: 10px 20px;
   font-size: 15px;
@@ -68,7 +82,7 @@ import { nav } from '~/data/landing'
   .nav {
     display: none;
   }
-  .small {
+  .signin {
     margin-left: auto;
   }
 }
